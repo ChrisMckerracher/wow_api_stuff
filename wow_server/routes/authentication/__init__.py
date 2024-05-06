@@ -8,7 +8,7 @@ from starlette.responses import RedirectResponse
 from typing_extensions import Annotated
 import requests
 
-from config.env import settings
+from wow_server.config.env import settings
 
 router = APIRouter(prefix="/auth")
 
