@@ -1,16 +1,17 @@
-import os
 from dotenv import load_dotenv
-from pydantic import BaseModel
+from pydantic_settings import BaseSettings
 
 load_dotenv()
 
 
-class Settings(BaseModel):
-    client_id: str = os.getenv("client_id")
-    client_secret: str = os.getenv("client_secret")
+class Settings(BaseSettings):
+    client_id: str
+    client_secret: str
     base_bnet_auth_url: str = "https://oauth.battle.net/authorize?" \
                               "response_type=code" \
                               "&scope=wow.profile" \
-                              "&redirect_uri=http://localhost:8000/auth/bnet/code" \
+                              "&redirect_uri=http://localhost:8000/auth/bnet/code"
+    base_bnet_token_url: str = "https://oauth.battle.net/token"
+
 
 settings = Settings()
