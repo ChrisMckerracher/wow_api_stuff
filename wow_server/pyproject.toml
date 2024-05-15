@@ -12,6 +12,7 @@ typing-extensions = "^4.11.0"
 uvicorn = "^0.29.0"
 pydantic-settings = "^2.2.1"
 requests = "^2.31.0"
+sqlalchemy = "^2.0.30"
 
 
 [build-system]

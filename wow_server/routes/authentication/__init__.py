@@ -8,7 +8,10 @@ from starlette.responses import RedirectResponse
 from typing_extensions import Annotated
 import requests
 
-from wow_server.config.env import settings
+from config.env import settings
+from routes.deps import SessionDependency
+from sqlalchemy.orm import Session as SQLAlchemySession
+from model.db import OAuth
 
 router = APIRouter(prefix="/auth")
 
@@ -19,6 +22,14 @@ class OAuthParams:
     state: str
 
 
+class AccessTokenResponse(BaseModel):
+    access_token: str
+    token_type: Literal["bearer"]
+    expires_in: int
+    scope: str
+    sub: int
+
+
 class AuthorizationCodeRequest(BaseModel):
     redirect_uri: str
     grant_type: Literal["authorization_code"] = "authorization_code"
@@ -26,14 +37,18 @@ class AuthorizationCodeRequest(BaseModel):
 
 
 @router.get("/bnet/code")
-def bnet_code(oauth_params: Annotated[OAuthParams, Depends()]):
+def bnet_code(oauth_params: Annotated[OAuthParams, Depends()], session: SQLAlchemySession = SessionDependency):
     # ToDo: state management
     request_body = AuthorizationCodeRequest(redirect_uri="http://localhost:8000/auth/bnet/code",
                                             code=oauth_params.code)
     response = requests.post(url=settings.base_bnet_token_url,
                              data=request_body.model_dump(),
                              auth=(settings.client_id, settings.client_secret))
-    print(response.text)
+    access_response = AccessTokenResponse.model_validate_json(response.text)
+    oauth_token = OAuth(user_id=access_response.sub, access_token=access_response.access_token,
+                        expires_in=access_response.expires_in)
+    session.add(oauth_token)
+    session.commit()
 
 
 @router.get("/bnet/signin")

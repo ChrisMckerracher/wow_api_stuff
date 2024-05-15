@@ -12,6 +12,7 @@ class Settings(BaseSettings):
                               "&scope=wow.profile" \
                               "&redirect_uri=http://localhost:8000/auth/bnet/code"
     base_bnet_token_url: str = "https://oauth.battle.net/token"
+    sqlite_db: str
 
 
 settings = Settings()
