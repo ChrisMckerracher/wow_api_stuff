@@ -7,17 +7,17 @@ import (
 
 // ToDo: fix some naming conventions
 type TokenBucketMap interface {
-	Append(key int, bucket ratelimit.TokenBucket)
+	Append(key int, bucket *ratelimit.TokenBucket)
 	Pop(key int) ratelimit.TokenBucket
 	Acquire(key int, leakRate int) (bool, error)
 }
 
 type MemoryTokenBucket struct {
-	tokens map[int]ratelimit.TokenBucket
+	tokens map[int]*ratelimit.TokenBucket
 }
 
 func newBucket() *MemoryTokenBucket {
-	tokenMap := make(map[int]ratelimit.TokenBucket)
+	tokenMap := make(map[int]*ratelimit.TokenBucket)
 	return &MemoryTokenBucket{tokens: tokenMap}
 }
 
@@ -29,5 +29,4 @@ func (m *MemoryTokenBucket) Acquire(key int, leakRate int) (bool, error) {
 	}
 
 	return bucketValue.Acquire(leakRate), nil
-
 }
