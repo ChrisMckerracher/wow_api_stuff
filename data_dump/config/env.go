@@ -9,4 +9,6 @@ type Env struct {
 	redis RedisEnv
 }
 
-func acquireEnvVars
+//func acquireEnvVars() {
+//
+//}
