@@ -5,6 +5,7 @@ import (
 	"data_dump/ratelimit/mem"
 	"fmt"
 	"math/rand/v2"
+	"strconv"
 	"sync"
 	"time"
 )
@@ -16,9 +17,9 @@ func sayHello() func() {
 	threadVal := rand.IntN(10000)
 	return func() {
 		if success, err := tokenBucket.Acquire(fixedKey, 1); success && err == nil {
-			fmt.Println(string(threadVal))
+			fmt.Println(strconv.Itoa(threadVal))
 		} else {
-			time.Sleep(1000)
+			time.Sleep(1000 * time.Millisecond)
 		}
 	}
 }
@@ -36,8 +37,12 @@ func main() {
 	tokenBucket = mem.NewBucket()
 	tokenBucket.Append(fixedKey, &keyBucket)
 
+	var wg sync.WaitGroup
+
 	for i := 0; i < 4; i++ {
+		wg.Add(1)
 		go func() {
+			defer wg.Done()
 			newHello := sayHello()
 
 			for {
@@ -46,4 +51,5 @@ func main() {
 		}()
 	}
 
+	select {}
 }

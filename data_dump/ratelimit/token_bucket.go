@@ -25,6 +25,7 @@ func (t *TokenBucket) Acquire(leakRate int) bool {
 
 	now := time.Now().UnixMilli()
 	delta := now - t.LastUpdate
+	t.LastUpdate = now
 	t.BucketFill += min(float32((delta/t.FillPeriod)*t.FillRate), t.BucketSize)
 
 	if t.BucketFill >= leakRateFloat {
