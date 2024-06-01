@@ -5,6 +5,7 @@ import (
 	"data_dump/ratelimit/mem"
 	"fmt"
 	"math/rand/v2"
+	"runtime"
 	"strconv"
 	"sync"
 	"time"
@@ -18,6 +19,7 @@ func sayHello() func() {
 	return func() {
 		if success, err := tokenBucket.Acquire(fixedKey, 1); success && err == nil {
 			fmt.Println(strconv.Itoa(threadVal))
+			runtime.Gosched()
 		} else {
 			time.Sleep(1000 * time.Millisecond)
 		}
