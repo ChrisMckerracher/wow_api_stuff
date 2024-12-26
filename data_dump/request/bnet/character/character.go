@@ -3,7 +3,8 @@ package character
 import (
 	"data_dump/request/bnet"
 	"fmt"
-	
+
+	"github.com/FuzzyStatic/blizzard/v3"
 )
 
 // todo: move these
