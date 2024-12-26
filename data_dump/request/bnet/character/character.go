@@ -2,6 +2,8 @@ package character
 
 import (
 	"data_dump/request/bnet"
+	"fmt"
+	
 )
 
 // todo: move these
@@ -14,16 +16,12 @@ type Client struct {
 	bnet.RegionalClient
 }
 
-func (c *Client) Scrape() {
-
-}
-
-func (c *Client) ScrapeUser(user Character, realm Server, region bnet.Region) {
-	bnetClient, err := c.Select(region)
-
-	if err != nil {
-
+// Scrape scrapes the leaderboard
+func (c *Client) Scrape() (interface{}, error) {
+	bnetClient, _ := c.Select(blizzard.US)
+	answer, _, err := bnetClient.WoWMythicKeystoneLeaderboard(c.Context, 11, 197, 641)
+	if answer != nil {
+		fmt.Println(answer.LeadingGroups)
 	}
-
-	//bnetClient.WoWCharacterMythicKeystoneProfile(c.Context, string(realm), string(user))
+	return answer, err
 }
