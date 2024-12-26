@@ -5,10 +5,10 @@ import (
 	"data_dump/ratelimit/mem"
 	"fmt"
 	"math/rand/v2"
-	"runtime"
 	"strconv"
 	"sync"
 	"time"
+	"runtime"
 )
 
 var tokenBucket mem.TokenBucketMap
