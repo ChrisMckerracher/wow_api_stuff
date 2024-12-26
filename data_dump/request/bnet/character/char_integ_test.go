@@ -3,9 +3,8 @@ package character
 import (
 	"context"
 	"data_dump/request/bnet"
-	"git
 	"github.com/stretchr/testify/suite"
-	"context"
+	"os"
 	"testing"
 )
 
