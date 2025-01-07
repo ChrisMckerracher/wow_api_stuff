@@ -2,7 +2,8 @@ package util
 
 import (
 	"fmt"
-	
+
+	"reflect"
 )
 
 func Flatten(nestedMap map[string]interface{}) map[string]interface{} {
